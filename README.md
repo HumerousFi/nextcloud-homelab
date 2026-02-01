@@ -18,8 +18,8 @@ The objective of this project was to deploy Nextcloud in a **stable, secure, and
 - Dedicated Nextcloud cron container
 
 **Networking**
-- Secure remote access via **Tailscale**
-- Optional Cloudflare Tunnel support
+- Secure administrative access via **Tailscale**
+- Public HTTPS access via **Cloudflare Tunnel** (no open inbound ports)
 - No direct public internet exposure
 
 ---
@@ -60,6 +60,7 @@ The objective of this project was to deploy Nextcloud in a **stable, secure, and
 
 ## Security Measures
 
+- Exposed securely via Cloudflare Tunnel with a custom domain and HTTPS, without any open inbound ports (zero-trust access model)
 - Explicit `trusted_domains` configuration
 - No public IP exposure
 - Access restricted via Tailscale private network
