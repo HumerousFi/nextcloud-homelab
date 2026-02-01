@@ -26,14 +26,14 @@ The objective of this project was to deploy Nextcloud in a **stable, secure, and
 
 ## Logical Architecture
 ```pgsql
-Client (Home)
-      |
-  Tailscale VPN
-      |
- Server (Hostel)
-      |
- Docker Compose
-      |
+         Client (Home)
+              |
+         Tailscale VPN
+              |
+         Server (Hostel)
+              |
+         Docker Compose
+              |
 +---------------------------+
 | Nextcloud (Apache + PHP) |
 |  - Redis file locking    |
