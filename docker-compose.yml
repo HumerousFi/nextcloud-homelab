@@ -1,0 +1,60 @@
+# Example docker-compose.yml used for a stable Nextcloud home lab deployment
+# Secrets and sensitive values have been redacted
+
+services:
+  db:
+    image: mariadb:10.6
+    container_name: nextcloud_db
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    environment:
+      MYSQL_ROOT_PASSWORD: <REDACTED>
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: <REDACTED>
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - nextcloud_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: nextcloud_redis
+    restart: unless-stopped
+    networks:
+      - nextcloud_net
+
+  app:
+    image: nextcloud:32-apache
+    container_name: nextcloud
+    restart: unless-stopped
+    ports:
+      - "8081:80" # Internal port exposed only to the host / tunnel
+    depends_on:
+      - db
+      - redis
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: <REDACTED>
+      REDIS_HOST: redis
+      REDIS_HOST_PORT: 6379
+    volumes:
+      - nextcloud:/var/www/html
+    networks:
+      - nextcloud_net
+
+  cron:
+    image: nextcloud:32-apache
+    container_name: nextcloud_cron
+    restart: unless-stopped
+    depends_on:
+      - app
+    entrypoint: /cron.sh
+    volumes:
+      - nextcloud:/var/www/html
+    networks:
+      - nextcloud_net
+
+volumes:
