@@ -58,3 +58,8 @@ services:
       - nextcloud_net
 
 volumes:
+  db:
+  nextcloud:
+
+networks:
+  nextcloud_net:
